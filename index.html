@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Global Metadata -->
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/svg+xml" href="/static/adgstudios.webp">
+    <meta name="color-scheme" content="dark light">
+    <!-- Primary Meta Tags -->
+    <title>ADGSTUDIOS | Image Converter API</title>
+    <meta name="title" content="ADGSTUDIOS | Image Converter API">
+    <meta name="description"
+        content="High-performance image conversion API using Rust and Actix Web, with Nginx proxy and caching for enhanced speed.">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://imageconvertapi.adgstudios.co.za/">
+    <meta property="og:title" content="ADGSTUDIOS | Image Converter API">
+    <meta property="og:description"
+        content="High-performance image conversion API using Rust and Actix Web, with Nginx proxy and caching for enhanced speed.">
+    <meta property="og:image" content="https://imageconvertapi.adgstudios.co.za/static/og-image.png">
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://imageconvertapi.adgstudios.co.za/">
+    <meta property="twitter:title" content="ADGSTUDIOS | Image Converter API">
+    <meta property="twitter:description"
+        content="High-performance image conversion API using Rust and Actix Web, with Nginx proxy and caching for enhanced speed.">
+    <meta property="twitter:image" content="https://imageconvertapi.adgstudios.co.za/static/og-image.png">
+    <!-- CSS and Static Files -->
+    <link href="./static/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./static/contact.DFH1hW7F.css">
+    <link rel="stylesheet" href="./static/register.Bid1H0XJ.css">
+    <!-- Scripts -->
+    <script type="module" src="./static/test.js"></script>
+    <script type="module" src="./static/page.7qqag-5g.js"></script>
+    <!-- Tailwind CSS CDN (Optional if not using custom CSS) -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"> -->
+    <style>
+        /* Custom Styles for Improved Form UI */
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .form-button {
+            padding: 0.75rem 1.5rem;
+            background-color: #4F46E5; /* Indigo-600 */
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-button:hover {
+            background-color: #4338CA; /* Indigo-700 */
+        }
+
+        .result-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .error-message {
+            color: #EF4444; /* Red-500 */
+            margin-top: 1rem;
+        }
+
+        /* Spinner Styles */
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #4F46E5; /* Indigo-600 */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-top: 1.5rem;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .form-layout {
+                display: flex;
+                gap: 2rem;
+            }
+
+            .form-fields {
+                flex: 1;
+            }
+
+            .form-result {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<style>
+    .wrap {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }                            
+</style>
+
+<body class="bg-white dark:bg-gray-950">
+    <!-- Header Section -->
+    <header id="main-header" data-shade="glassy"
+        class="fixed inset-x-6 top-4 z-50 mx-auto border-b border-dashed pb-2 transition-[max-width,bottom,border-color] duration-300 sm:inset-x-12 sm:top-6 lg:inset-x-0 max-w-3xl border-transparent">
+        <div id="header-content"
+            class="relative -mx-2 h-[54px] overflow-hidden rounded-full border p-2 transition-[height,padding,background,box-shadow,border-color] duration-300 lg:h-auto lg:rounded-full shadow-lg shadow-gray-950/5 bg-ui backdrop-blur-2xl border-[--ui-border-color]">
+            <div class="flex flex-wrap items-center justify-between">
+                <a href="/#home" class="flex items-center gap-1">
+                    <img src="./static/adgstudios.webp" alt="ADGSTUDIOS Logo" width="36" height="36">
+                    <span class="text-title font-semibold text-lg">ADGSTUDIOS</span>
+                </a>
+                <nav id="main-nav"
+                    class="group absolute inset-x-2 top-14 order-last m-auto flex flex-col pt-4 lg:inset-0 lg:size-fit lg:flex-row lg:gap-2 lg:pt-0">
+                    <span id="nav-indicator"
+                        class="absolute inset-y-0 hidden rounded-full bg-gray-950/5 opacity-0 duration-300 ease-out group-hover:opacity-100 lg:block"
+                        style="left: 176px; width: 70px;"></span>
+                    <a  
+                        href="/#how-it-works"
+                        class="nav-link btn sz-md lg:sz-xs variant-ghost intent-gray !text-title lg:text-body hover:text-title relative justify-start hover:!bg-gray-950/5 lg:justify-center lg:hover:!bg-transparent"
+                        >
+                        How It Works</a>
+                    <a
+                        href="/#get-started"
+                        class="nav-link btn sz-md lg:sz-xs variant-ghost intent-gray !text-title lg:text-body hover:text-title relative justify-start hover:!bg-gray-950/5 lg:justify-center lg:hover:!bg-transparent">
+                        Get Started</a>
+                </nav>
+                <div class="mr-1 flex gap-3">
+                    <a href="/#api"
+                        class="btn sz-xs variant-ghost intent-gray text-xs">API</a>
+                    <a href="https://github.com/adgsenpai/avif_converter_server" id="action-btn"
+                        class="btn sz-xs variant-solid text-xs !transition-all !duration-300 intent-neutral">GitHub</a>
+                    <button id="menu" data-opened="false"
+                        class="group relative -my-1 -mr-1 size-9 rounded-full transition duration-300 hover:bg-gray-950/5 active:scale-90 lg:hidden"
+                        aria-label="Open menu">
+                        <div aria-hidden="true" id="line1"
+                            class="m-auto h-[1.5px] w-4 rounded bg-gray-950 transition duration-300 group-data-[opened=true]:translate-y-[3.5px] group-data-[opened=true]:-rotate-45">
+                        </div>
+                        <div aria-hidden="true" id="line2"
+                            class="m-auto mt-1.5 h-[1.5px] w-4 rounded bg-gray-950 transition duration-300 group-data-[opened=true]:-translate-y-1 group-data-[opened=true]:rotate-45">
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="duration-150">
+        <!-- Hero Section -->
+        <section id="home" class="relative mx-auto max-w-5xl px-4 pt-36 lg:px-0">
+            <div
+                class="absolute -z-10 h-full w-full scale-[0.8] bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]">
+            </div>
+            <h1 class="text-title mx-auto text-center text-4xl font-semibold sm:mt-12 sm:text-6xl">High-Performance
+                Image Conversion API</h1>
+            <p class="text-body mx-auto my-8 max-w-lg text-center">Effortlessly convert and resize images using our API
+                built with Rust and Actix Web, enhanced by Nginx proxying and caching for optimal performance.</p>
+            <a href="https://github.com/adgsenpai/avif_converter_server"
+                class="btn sz-lg variant-solid intent-neutral before:rounded-btn after:rounded-btn before:bg-primary-500 relative mx-auto w-fit overflow-hidden before:absolute before:inset-0 before:translate-y-full before:blur-lg before:duration-300 after:absolute after:inset-px after:border after:border-white/15 hover:before:translate-y-1/2">
+                <span class="relative font-normal">View on GitHub</span>
+                <span class="relative -mr-2.5 ml-2 flex size-6 rounded-full border border-white/10 bg-white/15">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"
+                        class="m-auto size-5" data-slot="icon" aria-hidden="true">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="m10 16 4-4-4-4"></path>
+                    </svg>
+                </span>
+            </a>
+            <br>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="mb-12 scroll-my-16 bg-gray-950 pb-12 md:mb-20 lg:mb-32">
+            <div class="dark mx-auto max-w-6xl border-x border-gray-900 px-3">
+                <div class="border-x border-gray-900 px-2 pb-12 pt-20 sm:px-12">
+                    <h2 class="text-center text-3xl font-semibold text-white md:text-4xl">Why Choose Our Service</h2>
+                    <div
+                        class="*:rounded-card mt-16 grid gap-2 *:flex *:flex-col *:justify-between *:border *:border-gray-800 *:bg-gray-900 *:p-8 sm:*:p-12 md:grid-cols-6">
+                        <!-- Feature 1 -->
+                        <div class="group md:col-span-3">
+                            <div
+                                class="relative before:absolute before:-inset-x-5 before:bottom-0 before:z-[1] before:h-1/2 before:bg-gradient-to-b before:from-transparent before:to-gray-900">
+                                <div
+                                    class="rounded-card relative space-y-4 border border-gray-800 bg-gray-900 p-[--card-padding] duration-300 group-hover:border-gray-700/75 group-hover:bg-gray-800">
+                                    <!-- Feature Illustration -->
+                                    <img src="./static/6437619.webp" alt="High Performance" class="w-full">
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-white">High Performance | Boost SEO</h3>
+                                <p class="mt-4 text-sm text-gray-400">Built with Rust and Actix Web for lightning-fast
+                                    image processing and minimal latency. AVIF images improve SEO ranking.</p>
+                            </div>
+                        </div>
+                        <!-- Feature 2 -->
+                        <div class="group md:col-span-3">
+                            <div
+                                class="relative before:absolute before:-inset-x-5 before:bottom-0 before:z-[1] before:h-1/2 before:bg-gradient-to-b before:from-transparent before:to-gray-900">
+                                <div
+                                    class="rounded-card relative space-y-4 border border-gray-800 bg-gray-900 p-[--card-padding] duration-300 group-hover:border-gray-700/75 group-hover:bg-gray-800">
+                                    <!-- Feature Illustration -->
+                                    <img src="./static/4498386.webp" alt="Flexible Conversion" class="w-full">
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-white">Flexible Conversion</h3>
+                                <p class="mt-4 text-sm text-gray-400">Convert images to AVIF format and resize them to
+                                    your desired dimensions with ease.</p>
+                            </div>
+                        </div>
+                        <!-- Feature 3 -->
+                        <div class="group md:col-span-4">
+                            <div
+                                class="before:rounded-card relative before:absolute before:inset-x-2 before:-top-2 before:bottom-0 before:border before:border-gray-700 before:bg-gray-800 before:opacity-50">
+                                <div
+                                    class="relative before:absolute before:inset-x-0 before:bottom-0 before:h-1/2 before:bg-gradient-to-b before:from-transparent before:to-gray-900">
+                                    <div
+                                        class="rounded-card relative space-y-4 border border-gray-800 bg-gray-900 p-[--card-padding] duration-300 group-hover:border-gray-700/75 group-hover:bg-gray-800">
+                                        <!-- Feature Illustration -->
+                                        <img src="./static/free-nginx-logo-icon-download-in-svg-png-gif-file-formats--technology-social-media-company-vol-5-pack-logos-icons-3030173.webp"
+                                            alt="Nginx Proxy & Cache" class="w-full">
+                                    </div>
+                                </div>
+                            </div>
+                            <h3 class="text-white">Nginx Proxy & Cache</h3>
+                            <p class="mt-4 text-sm text-gray-400">Leveraging Nginx for proxying and caching, we deliver
+                                enhanced performance and reliability.</p>
+                        </div>
+                        <!-- Feature 4 -->
+                        <div class="group md:col-span-2">
+                            <div
+                                class="relative select-none before:absolute before:-inset-x-5 before:bottom-0 before:z-[1] before:h-1/2 before:bg-gradient-to-b before:from-transparent before:to-gray-900">
+                                <div
+                                    class="rounded-card relative space-y-4 border border-gray-800 bg-gray-900 p-[--card-padding] duration-300 group-hover:border-gray-700/75 group-hover:bg-gray-800">
+                                    <!-- Feature Illustration -->
+                                    <img src="./static/5639417.webp" alt="Easy Integration" class="w-full">
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-white">Easy Integration</h3>
+                                <p class="mt-4 text-sm text-gray-400">Integrate our service into your applications
+                                    seamlessly via simple HTTP requests.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Decorative Elements -->
+                <div class="mx-auto max-w-6xl border-x border-t border-gray-900 p-1 px-3">
+                    <div aria-hidden="true"
+                        class="h-3 [--stripes-color:theme(colors.white/0.1)] [background-image:linear-gradient(-45deg,var(--stripes-color)_25%,transparent_25%,transparent_50%,var(--stripes-color)_50%,var(--stripes-color)_75%,transparent_75%,transparent)] [background-size:5px_5px]">
+                    </div>
+                </div>
+                <div aria-hidden="true" class="border-b border-gray-900"></div>
+            </div>
+            <div id="how-it-works"></div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="mb-12 md:mb-20 lg:mb-32">
+            <div class="mx-auto max-w-6xl px-3">
+                <div class="px-2 sm:px-12">
+                    <h2 class="text-title text-3xl font-semibold md:text-4xl">How It Works</h2>
+                    <div class="mt-12 grid gap-6 md:grid-cols-2 lg:gap-0">
+                        <ol class="list-decimal list-inside text-body space-y-4">
+                            <li>
+                                <h3 class="text-title mb-1 text-lg font-medium">Send a Request</h3>
+                                <p>Make a GET request to our `/convert` endpoint with your image URL and optional width
+                                    and height parameters.</p>
+                            </li>
+                            <li>
+                                <h3 class="text-title mb-1 text-lg font-medium">Image Processing</h3>
+                                <p>Our server fetches the image, converts it to AVIF format, and resizes it if
+                                    dimensions are provided.</p>
+                            </li>
+                            <li>
+                                <h3 class="text-title mb-1 text-lg font-medium">Receive the Image</h3>
+                                <p>You receive the converted image in AVIF format, ready for use in your applications or
+                                    websites.</p>
+                            </li>
+                            <li>
+                                <h3 class="text-title mb-1 text-lg font-medium">Caching for Speed</h3>
+                                <p>Nginx caches frequently requested images, reducing processing time and improving
+                                    response speed.</p>
+                            </li>
+                        </ol>
+                        <div>
+                            <!-- Illustration or Image -->
+                            <img src="https://mermaid.ink/svg/pako:eNptkk9v2zAMxb8KodMGZMjdhwLFug4FumFImp504STaJmZLnkRn64p-99GSU6R_fLEM_t4j9cxH46In05hMv2cKjq4Yu4SjDaDPhEnY8YRB4JApAebyflvdUzrWej29Jb53HP4uQDnYUInF7dPFRRU1Kg4evn65g7SMkwUkwtbFoEWBPyw98IgdwWF3a21AheMkHAMOWvXSb3virpelMY4klHJtU_3PGl2TuJNZm-JYHN9HP6_tK6wDXd7fXEMb04hSJTgI7CjzPwLPI4WsE2WYUjyyJ1-Zd61X0bNznshxy-TPfKpcc3k13pLcGtgakMrKaMWu0iVrhctbr4KuX-5b_rUMD6eYVVlE-aWqtvhR7wFuEa8gfOAW8Ig84M-BPtpgNmYkTYS97tLjYmON9DSSNY0ePaZf1tjwpBzOEvcPwZlG0kwbk-Lc9aZpccj6NU8e5bSFJ4Q8S0zf6qaWhX36D3rO75s"
+                                alt="How It Works" class="w-full">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="api"></div>
+        </section>
+
+        <!-- API Section -->
+        <section class="mb-12 md:mb-20 lg:mb-32 bg-gray-950 text-white">
+            <div class="mx-auto max-w-6xl px-3 py-12">
+                <div class="px-2 sm:px-12">
+                    <h2 class="text-center text-3xl font-semibold md:text-4xl">API Endpoint</h2>
+                    <p class="mt-4 text-center text-body mx-auto max-w-lg">Use our straightforward API to integrate
+                        image conversion into your projects.</p>
+                    <div class="mt-8 bg-gray-900 p-6 rounded-lg">
+                        <pre class="text-sm text-white overflow-auto wrap">
+GET /convert?url=&lt;IMAGE_URL&gt;&width=&lt;WIDTH&gt;&height=&lt;HEIGHT&gt;
+                        </pre>
+                    </div>
+                    <h2 class="text-center text-3xl font-semibold md:text-4xl mt-12">Public API Endpoint</h2>
+                    <div class="mt-8 bg-gray-900 p-6 rounded-lg">
+                        <pre class="text-sm text-white overflow-auto wrap">
+GET https://imageconvertapi.adgstudios.co.za/convert?url=&lt;IMAGE_URL&gt;&width=&lt;WIDTH&gt;&height=&lt;HEIGHT&gt;
+                        </pre>
+                    </div>
+                    <div class="mt-4">
+                        <p><strong>Parameters:</strong></p>
+                        <br>
+                        <ul class="list-disc list-inside text-body space-y-2">
+                            <li><code>url</code> (required): The URL of the image to convert.</li>
+                            <li><code>width</code> (optional): Desired width of the image.</li>
+                            <li><code>height</code> (optional): Desired height of the image.</li>
+                        </ul>
+                        <br>
+                        <p class="mt-2">The response will be the converted image in AVIF format.</p>
+                    </div>
+                </div>
+            </div>
+            <div id="get-started"></div>
+        </section>
+
+        <!-- Get Started Section with Enhanced Form -->
+        <section class="mb-12 md:mb-20 lg:mb-32">
+            <div class="mx-auto max-w-6xl px-3">
+                <div class="px-2 sm:px-12 text-center">
+                    <h2 class="text-title text-3xl font-semibold md:text-4xl">Get Started Now</h2>
+                    <p class="mt-4 text-body mx-auto max-w-lg">Experience fast and efficient image conversion. Start
+                        integrating our service today!</p>
+                </div>
+            </div>
+            <br>
+            <div class="mx-auto max-w-6xl px-3">
+                <!-- Enhanced Form Container -->
+                <div class="form-container mx-auto max-w-2xl">
+                    <form id="imageConverterForm" class="form-layout">
+                        <div class="form-fields">
+                            <label for="imageUrl" class="block text-left text-white mb-2">Image URL<span
+                                    class="text-red-500">*</span></label>
+                            <input type="url" id="imageUrl" name="url" placeholder="Enter image URL"
+                                class="form-input bg-gray-800 text-white placeholder-gray-500" required>
+
+                            <label for="imageWidth" class="block text-left text-white mb-2">Width (optional)</label>
+                            <input type="number" id="imageWidth" name="width" placeholder="Width in pixels"
+                                class="form-input bg-gray-800 text-white placeholder-gray-500" min="1">
+
+                            <label for="imageHeight" class="block text-left text-white mb-2">Height (optional)</label>
+                            <input type="number" id="imageHeight" name="height" placeholder="Height in pixels"
+                                class="form-input bg-gray-800 text-white placeholder-gray-500" min="1">
+
+                            <button type="submit" class="form-button">Convert Image</button>
+                        </div>
+                        <div class="form-result">
+                            <!-- Spinner (hidden by default) -->
+                            <div id="spinner" class="spinner" style="display: none;"></div>
+                            <!-- Result Image -->
+                            <div id="resultContainer"></div>
+                            <!-- Error Message -->
+                            <div id="errorContainer" class="error-message"></div>                            
+                        </div>                        
+                    </form>
+                    <div class="mt-8 bg-gray-900 p-6 rounded-lg" id="code-output" style="display: none;">
+                        <pre class="text-sm text-white overflow-auto wrap">
+                        </pre>
+                        <!-- wrap -->                        
+
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="mx-auto max-w-6xl px-3">
+                <div class="px-2 sm:px-12 text-center">
+                    <img src="/convert?url=https://raw.githubusercontent.com/adgsenpai/AnimeflixCDNResources/refs/heads/main/static/AnimeflixGirls/7-min.png"
+                        alt="Animeflix Logo" class="w-1/2 mx-auto rounded-lg shine">
+                </div>
+                <br>
+                <br>
+                <h3 class="text-title text-3xl font-semibold md:text-4xl">Example Request</h3>
+                <br>
+                <p class="text-body text-xl font-semibold md:text-xl">Image URL</p>
+                <div class="mt-8 bg-gray-900 p-6 rounded-lg">
+                    <pre class="text-sm text-white overflow-auto wrap">
+<!-- Example 1: Using an Image Tag in HTML -->
+&lt;img src="https://imageconvertapi.adgstudios.co.za/convert?url=https://raw.githubusercontent.com/adgsenpai/AnimeflixCDNResources/refs/heads/main/static/AnimeflixGirls/7-min.png&amp;width=500&amp;height=300" alt="Converted Image"&gt;
+
+<!-- Example 2: Using a GET Request in URL format -->
+GET https://imageconvertapi.adgstudios.co.za/convert?url=https://raw.githubusercontent.com/adgsenpai/AnimeflixCDNResources/refs/heads/main/static/AnimeflixGirls/7-min.png&amp;width=500&amp;height=300
+
+<!-- Example 3: Using cURL in Command Line -->
+curl -X GET "https://imageconvertapi.adgstudios.co.za/convert?url=https://raw.githubusercontent.com/adgsenpai/AnimeflixCDNResources/refs/heads/main/static/AnimeflixGirls/7-min.png&amp;width=500&amp;height=300" -H "accept: image/avif"
+
+<!-- Example 4: Using Fetch API in JavaScript -->
+fetch("https://imageconvertapi.adgstudios.co.za/convert?url=https://raw.githubusercontent.com/adgsenpai/AnimeflixCDNResources/refs/heads/main/static/AnimeflixGirls/7-min.png&amp;width=500&amp;height=300", {
+    method: "GET",
+    headers: {
+        accept: "image/avif"
+    }
+})
+.then(response => response.blob())
+.then(imageBlob => {
+    const imageObjectURL = URL.createObjectURL(imageBlob);
+    document.querySelector("#yourImageContainer").src = imageObjectURL;
+});
+                    </pre>
+                </div>
+                <div>
+                </div>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="w-full pt-16">
+        <div class="mb-12 px-6 sm:px-12 lg:px-28">
+            <div class="container m-auto space-y-6">
+                <a href="#home" aria-label="Go home"
+                    class="mx-auto block size-fit rounded-full duration-300 hover:ring hover:ring-gray-200">
+                    <img src="./static/adgstudios.webp" alt="ADGSTUDIOS Logo" width="36" height="36">
+                </a>
+                <div class="flex flex-wrap items-center justify-center gap-4 text-sm">
+                    <a href="https://adgstudios.co.za" class="hover:text-primary-600">ADGSTUDIOS</a>
+                    <a href="https://anime.adgstudios.co.za" class="hover:text-primary-600">Animeflix</a>
+                    <a href="#api" class="hover:text-primary-600">API</a>
+                </div>
+                <div class="text-caption text-center text-xs">
+                    <span class="tracking-wide">© <span id="year">2024</span> ADGSTUDIOS. All rights reserved.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Form Handling -->
+    <script>
+        document.getElementById('imageConverterForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            // Reset the code output
+            const codeOutput = document.getElementById('code-output');
+            codeOutput.style.display = 'none';
+
+            // Clear previous results and errors
+            const resultContainer = document.getElementById('resultContainer');
+            const errorContainer = document.getElementById('errorContainer');
+            const spinner = document.getElementById('spinner');
+
+            resultContainer.innerHTML = '';
+            errorContainer.textContent = '';
+            spinner.style.display = 'block'; // Show spinner
+
+            // Get form values
+            const url = document.getElementById('imageUrl').value.trim();
+            const width = document.getElementById('imageWidth').value.trim();
+            const height = document.getElementById('imageHeight').value.trim();
+
+            // Enhanced validation
+            if (!url) {
+                spinner.style.display = 'none'; // Hide spinner
+                errorContainer.textContent = 'Image URL is required.';
+                return;
+            }
+
+            // Additional validation: ensure width and height are positive integers if provided
+            if (width && (!/^\d+$/.test(width) || parseInt(width) <= 0)) {
+                spinner.style.display = 'none'; // Hide spinner
+                errorContainer.textContent = 'Width must be a positive integer.';
+                return;
+            }
+
+            if (height && (!/^\d+$/.test(height) || parseInt(height) <= 0)) {
+                spinner.style.display = 'none'; // Hide spinner
+                errorContainer.textContent = 'Height must be a positive integer.';
+                return;
+            }
+
+            // Build the endpoint URL
+            let endpoint = `/convert?url=${encodeURIComponent(url)}`;
+            if (width && height) {
+                endpoint += `&width=${encodeURIComponent(width)}&height=${encodeURIComponent(height)}`;
+            }
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: {
+                        accept: 'image/avif'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to convert image. Status: ${response.status}`);
+                }
+
+                const blob = await response.blob();
+                const imageObjectURL = URL.createObjectURL(blob);
+                const imgElement = document.createElement('img');
+                imgElement.src = imageObjectURL;
+                imgElement.alt = 'Converted Image';
+                imgElement.className = 'result-image';
+              
+                resultContainer.appendChild(imgElement);
+
+                // Display the code output
+                const codeOutput = document.getElementById('code-output');
+                codeOutput.style.display = 'block';
+                const finalEndpoint = `https://imageconvertapi.adgstudios.co.za${endpoint}`;
+                codeOutput.querySelector('pre').textContent = `<!-- Example: Using an Image Tag in HTML -->\n<img src="${finalEndpoint}" alt="Converted Image">`;
+
+
+
+
+
+            } catch (error) {
+                console.error(error);
+                errorContainer.textContent = `Error: ${error.message}`;
+            } finally {
+                spinner.style.display = 'none'; // Hide spinner
+            }
+        });
+
+        // Update the year in the footer dynamically
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+
+</html>
