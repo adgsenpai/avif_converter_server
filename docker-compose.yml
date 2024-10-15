@@ -4,4 +4,4 @@ services:
     build:
       context: .
     ports:
-      - "8080:1024" # Map container port 8080 to host port 8080
+      - "1024:8080"

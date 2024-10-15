@@ -8,6 +8,8 @@
     <link rel="icon" type="image/svg+xml" href="/static/adgstudios.webp">
     <meta name="color-scheme" content="dark light">
     <!-- Primary Meta Tags -->
+    <title>ADGSTUDIOS | Image Converter API</title>
+    <meta name="title" content="ADGSTUDIOS | Image Converter API">
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://imageconvertapi.adgstudios.co.za/">
@@ -59,7 +61,8 @@
 
         .form-button {
             padding: 0.75rem 1.5rem;
-            background-color: #4F46E5; /* Indigo-600 */
+            background-color: #4F46E5;
+            /* Indigo-600 */
             color: #ffffff;
             border: none;
             border-radius: 0.5rem;
@@ -69,7 +72,8 @@
         }
 
         .form-button:hover {
-            background-color: #4338CA; /* Indigo-700 */
+            background-color: #4338CA;
+            /* Indigo-700 */
         }
 
         .result-image {
@@ -81,14 +85,16 @@
         }
 
         .error-message {
-            color: #EF4444; /* Red-500 */
+            color: #EF4444;
+            /* Red-500 */
             margin-top: 1rem;
         }
 
         /* Spinner Styles */
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #4F46E5; /* Indigo-600 */
+            border-top: 4px solid #4F46E5;
+            /* Indigo-600 */
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -131,7 +137,7 @@
     .wrap {
         white-space: pre-wrap;
         word-wrap: break-word;
-    }                            
+    }
 </style>
 
 <body class="bg-white dark:bg-gray-950">
@@ -150,19 +156,15 @@
                     <span id="nav-indicator"
                         class="absolute inset-y-0 hidden rounded-full bg-gray-950/5 opacity-0 duration-300 ease-out group-hover:opacity-100 lg:block"
                         style="left: 176px; width: 70px;"></span>
-                    <a  
-                        href="/#how-it-works"
-                        class="nav-link btn sz-md lg:sz-xs variant-ghost intent-gray !text-title lg:text-body hover:text-title relative justify-start hover:!bg-gray-950/5 lg:justify-center lg:hover:!bg-transparent"
-                        >
+                    <a href="/#how-it-works"
+                        class="nav-link btn sz-md lg:sz-xs variant-ghost intent-gray !text-title lg:text-body hover:text-title relative justify-start hover:!bg-gray-950/5 lg:justify-center lg:hover:!bg-transparent">
                         How It Works</a>
-                    <a
-                        href="/#get-started"
+                    <a href="/#get-started"
                         class="nav-link btn sz-md lg:sz-xs variant-ghost intent-gray !text-title lg:text-body hover:text-title relative justify-start hover:!bg-gray-950/5 lg:justify-center lg:hover:!bg-transparent">
                         Get Started</a>
                 </nav>
                 <div class="mr-1 flex gap-3">
-                    <a href="/#api"
-                        class="btn sz-xs variant-ghost intent-gray text-xs">API</a>
+                    <a href="/#api" class="btn sz-xs variant-ghost intent-gray text-xs">API</a>
                     <a href="https://github.com/adgsenpai/avif_converter_server" id="action-btn"
                         class="btn sz-xs variant-solid text-xs !transition-all !duration-300 intent-neutral">GitHub</a>
                     <button id="menu" data-opened="false"
@@ -400,13 +402,13 @@ GET https://imageconvertapi.adgstudios.co.za/convert?url=&lt;IMAGE_URL&gt;&width
                             <!-- Result Image -->
                             <div id="resultContainer"></div>
                             <!-- Error Message -->
-                            <div id="errorContainer" class="error-message"></div>                            
-                        </div>                        
+                            <div id="errorContainer" class="error-message"></div>
+                        </div>
                     </form>
                     <div class="mt-8 bg-gray-900 p-6 rounded-lg" id="code-output" style="display: none;">
                         <pre class="text-sm text-white overflow-auto wrap">
                         </pre>
-                        <!-- wrap -->                        
+                        <!-- wrap -->
 
                     </div>
                 </div>
@@ -539,7 +541,7 @@ fetch("https://imageconvertapi.adgstudios.co.za/convert?url=https://raw.githubus
                 imgElement.src = imageObjectURL;
                 imgElement.alt = 'Converted Image';
                 imgElement.className = 'result-image';
-              
+
                 resultContainer.appendChild(imgElement);
 
                 // Display the code output
