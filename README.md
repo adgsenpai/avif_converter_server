@@ -2,6 +2,9 @@
 
 This project is a web service that allows you to convert and resize images. It uses the Actix Web framework and the ravif library for AVIF image conversion.
 
+![Screenshot 2024-10-16 at 01 42 34](https://github.com/user-attachments/assets/16ace0c6-6e7e-43c2-a890-6ef05f7ab276)
+
+
 ## Installation
 
 Make sure you have Rust and Cargo installed on your system. You can install them from [https://www.rust-lang.org/](https://www.rust-lang.org/).
